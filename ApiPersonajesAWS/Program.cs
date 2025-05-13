@@ -5,6 +5,12 @@ using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+
+builder.Services.AddCors(p => p.AddPolicy("corseabled", options =>
+{
+    options.WithOrigins("*").AllowAnyMethod().AllowAnyHeader();
+}));
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -26,7 +32,14 @@ if (app.Environment.IsDevelopment())
 {
     
 }
-app.MapScalarApiReference();
+app.MapScalarApiReference(opt=>
+{
+    opt.Title = "Scalar personajes";
+    opt.Theme = ScalarTheme.BluePlanet;
+}
+
+);
+app.UseCors("corseabled");
 app.MapOpenApi();
 
 app.UseHttpsRedirection();
